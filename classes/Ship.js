@@ -2,8 +2,8 @@ import Phaser from "phaser";
 import Bullet from "./Bullet.js";
 
 export default class Ship extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y, width, height) {
-    super(scene, x, y, scene.generateRectangleSprite(width, height));
+  constructor(scene, x, y) {
+    super(scene, x, y, "ship");
     this.scene = scene;
 
     // Add to rendering engine
@@ -13,7 +13,7 @@ export default class Ship extends Phaser.Physics.Arcade.Sprite {
 
     this.setCollideWorldBounds(true);
 
-    this.setMaxVelocity(450, 450);
+    this.setMaxVelocity(300, 300);
     this.setDrag(1000);
     this.setBounce(1, 1);
 
@@ -23,28 +23,28 @@ export default class Ship extends Phaser.Physics.Arcade.Sprite {
       RIGHT,
       UP,
       DOWN,
-      Q,
-      O,
-      P,
-      A
+      W,
+      A,
+      S,
+      D
     } = Phaser.Input.Keyboard.KeyCodes;
     this.keys = scene.input.keyboard.addKeys({
       left: LEFT,
       right: RIGHT,
       up: UP,
       down: DOWN,
-      q: Q,
-      o: O,
-      p: P,
-      a: A
+      w: W,
+      a: A,
+      s: S,
+      d: D
     });
 
     // Hook into the game's update event
     scene.events.on("update", this.update, this);
     this.bulletTimeAccumulater = 0; // Stores seconds elapsed since last bullet, modified when firing. Used to determine when to fire bullets
 
-    // set up ship-ball collisions
-    scene.physics.add.collider(this, scene.ball, () => {
+    // set up ship-asteroid collisions
+    scene.physics.add.collider(this, scene.asteroid, () => {
       //scene.scene.stop("PlayScene");
       //scene.scene.start("PlayScene");
       scene.scene.restart("PlayScene");
@@ -57,24 +57,24 @@ export default class Ship extends Phaser.Physics.Arcade.Sprite {
     const keys = this.keys; // store for easy access
 
     // Up/down controls
-    if (keys.up.isDown) {
-      this.setVelocityY(-300);
-    } else if (keys.down.isDown) {
-      this.setVelocityY(300);
+    if (keys.up.isDown || keys.w.isDown) {
+      this.setVelocityY(-200);
+    } else if (keys.down.isDown || keys.s.isDown) {
+      this.setVelocityY(200);
     }
 
     // Let/right controls
-    if (keys.left.isDown) {
-      this.setVelocityX(-300);
-    } else if (keys.right.isDown) {
-      this.setVelocityX(300);
+    if (keys.left.isDown || keys.a.isDown) {
+      this.setVelocityX(-200);
+    } else if (keys.right.isDown || keys.d.isDown) {
+      this.setVelocityX(200);
     }
 
     // Fire a bullet every half second
     this.bulletTimeAccumulater += delta;
     if (this.bulletTimeAccumulater > 250) {
       this.bulletTimeAccumulater = 0;
-      new Bullet(this.scene, this.x, this.y);
+      new Bullet(this.scene, this.x, this.y - 20);
     }
   }
 

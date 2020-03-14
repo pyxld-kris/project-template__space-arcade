@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 import Timer from "../classes/Timer.js";
-import Ball from "../classes/Ball.js";
+import Asteroid from "../classes/Asteroid.js";
 import Ship from "../classes/Ship.js";
 
 export default class PlayScene extends Phaser.Scene {
@@ -9,9 +9,12 @@ export default class PlayScene extends Phaser.Scene {
     super("PlayScene");
   }
 
-  preload() {}
-
   create() {
+    // Start UIScene, which will layer on top of PlayScene
+    this.scene.run("UIScene");
+
+    let halfGameWidth = this.game.config.width / 2;
+    let halfGameHeight = this.game.config.height / 2;
     this.camera = this.cameras.main;
     const cursors = this.input.keyboard.createCursorKeys();
     this.camera.setBounds(
@@ -21,8 +24,18 @@ export default class PlayScene extends Phaser.Scene {
       this.game.config.height
     );
 
-    this.ball = new Ball(this, 100, 100);
-    this.ball.setCollideWorldBounds(true);
+    // Create background, and do really simple animation
+    this.background = this.add
+      .sprite(halfGameWidth, this.game.config.height, "background")
+      .setOrigin(0.5, 1);
+    clearTimeout(this.backgroundAnimInterval); // Keep animations from stacking up
+    this.backgroundAnimInterval = setInterval(() => {
+      //this.background.x -= 1;
+      this.background.y += 1;
+    }, 100);
+
+    this.asteroid = new Asteroid(this, 100, 100);
+    this.asteroid.setCollideWorldBounds(true);
 
     // Create the space ship
     this.ship = new Ship(
@@ -32,9 +45,9 @@ export default class PlayScene extends Phaser.Scene {
       40,
       40
     );
-    //this.physics.add.collider(this.ball, this.rightPaddle);
+    //this.physics.add.collider(this.asteroid, this.rightPaddle);
 
-    this.physics.add.collider([this.ship], this.ball);
+    this.physics.add.collider([this.ship], this.asteroid);
     /*
     this.add
       .text(0, 0, "Arrow keys to move paddles!", {
@@ -51,37 +64,8 @@ export default class PlayScene extends Phaser.Scene {
 
   update(time, delta) {}
 
-  /* <Begin> helper functions added by Kris */
-  //
-  //
-
-  generateRectangleSprite(width, height, color) {
-    if (color === undefined) color = 0xffffff;
-
-    // Returns key of generated sprite object
-    let spriteKey = "rectangle-sprite-" + width + "x" + height;
-
-    var graphics = this.add
-      .graphics()
-      .fillStyle(color)
-      .fillRect(0, 0, width, height)
-      .generateTexture(spriteKey, width, height);
-    graphics.destroy();
-
-    return spriteKey;
+  destroy() {
+    clearTimeout(this.backgroundAnimInterval);
+    super.destroy();
   }
-  generateSquareSprite(width, color) {
-    // Returns key of generated sprite object
-    return this.generateRectangleSprite(width, width, color);
-  }
-
-  addPhysicalRectangle(x, y, width, height, color, alphaIThinkMaybe) {
-    // TODO: alphaIThinkMaybe name change
-    let rect = this.add.rectangle(x, y, width, height, color, alphaIThinkMaybe);
-    rect = this.physics.add.existing(rect, true);
-
-    return rect;
-  }
-
-  /* </End> Helper functions added by kris */
 }

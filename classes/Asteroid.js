@@ -1,12 +1,12 @@
 import Phaser from "phaser";
 
-export default class Ball extends Phaser.Physics.Arcade.Sprite {
+export default class Asteroid extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, scene.generateSquareSprite(100, 0xff0000));
+    super(scene, x, y, "asteroid");
     this.scene = scene;
 
     this.scale = 1;
-    this.maxVelocity = 100;
+    this.maxVelocity = 50;
 
     // Add to rendering engine
     scene.add.existing(this);
@@ -21,7 +21,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   bulletHit() {
-    this.maxVelocity += 20;
+    this.maxVelocity += 15;
     this.setMaxVelocity(this.maxVelocity, this.maxVelocity);
 
     this.scale -= 0.025;

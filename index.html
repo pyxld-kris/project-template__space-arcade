@@ -47,46 +47,18 @@
       }
 
       #game-container {
+        min-width: 60vw;
+        min-height: 40vh;
+        max-height: 75vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: 5%;
-        width: 100%;
-        max-width: 100vh;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0px;
       }
 
       #game-container > canvas {
-        border-radius: 0px;
-        height: 70vh;
-        border: 2px solid white;
-      }
-
-      @media screen and (max-width: 550px) {
-      }
-
-      /* Blinking text */
-      .blinking {
-        animation: blinkingText 1.2s infinite;
-      }
-      @keyframes blinkingText {
-        0% {
-          color: #fff;
-        }
-        49% {
-          color: #fff;
-        }
-        60% {
-          color: transparent;
-        }
-        99% {
-          color: transparent;
-        }
-        100% {
-          color: #fff;
-        }
+        border-radius: 5px;
+        width: 100%;
+        margin: 10px;
       }
     </style>
 

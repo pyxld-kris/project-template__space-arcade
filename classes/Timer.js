@@ -13,7 +13,7 @@ export default class Timer extends Phaser.GameObjects.Text {
     style.fontSize = style.fontSize ? style.fontSize : "32px";
     style.fontFamily = style.fontFamily ? style.fontFamily : '"Press Start 2P"';
     style.align = style.align ? style.align : "center";
-    style.fill = style.fill ? style.fill : "#ffffff";
+    style.fill = style.fill ? style.fill : "#000000";
     style.padding = style.padding ? style.padding : { x: 1, y: 1 };
     style.backgroundColor = style.backgroundColor
       ? style.backgroundColor

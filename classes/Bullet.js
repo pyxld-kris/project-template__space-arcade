@@ -2,7 +2,7 @@ import Phaser from "phaser";
 
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, scene.generateSquareSprite(15));
+    super(scene, x, y, "bullet");
     this.scene = scene;
 
     // Add to rendering engine
@@ -14,15 +14,15 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
       .setMaxVelocity(0, 800)
       .setBounce(3.2, 1);
 
-    this.setVelocity(0, -400);
+    this.setVelocity(0, -300);
 
     // Hook into the game's update event
     scene.events.on("update", this.update, this);
 
-    // Set up collisions with ball
-    scene.physics.add.collider(this, scene.ball, () => {
+    // Set up collisions with asteroid
+    scene.physics.add.collider(this, scene.asteroid, () => {
       this.scene.camera.shake(50, 0.02);
-      this.scene.ball.bulletHit();
+      this.scene.asteroid.bulletHit();
       this.destroy();
     });
   }
